@@ -1,1 +1,7 @@
-This is a starter template for [Learn Next.js](https://nextjs.org/learn).
+# チェックリスト管理用画面
+
+## 使用技術
+
+- React
+- NextJS
+- TypeScript
