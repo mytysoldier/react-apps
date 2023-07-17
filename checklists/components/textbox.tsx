@@ -25,7 +25,7 @@ const TextBox: FC<Props> = ({ addItem, deleteAll }) => {
         追加
       </button>
       <button className={styles.button} onClick={deleteAll}>
-        すべてクリア
+        リストクリア
       </button>
     </div>
   );
