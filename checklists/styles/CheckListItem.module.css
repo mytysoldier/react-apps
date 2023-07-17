@@ -1,0 +1,16 @@
+.grid {
+  display: flex;
+  grid-gap: 10px;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.active {
+  color: black;
+  text-decoration-line: none;
+}
+
+.done {
+  color: grey;
+  text-decoration-line: line-through;
+}

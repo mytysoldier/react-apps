@@ -1,4 +1,5 @@
 import { FC, useState } from "react";
+import styles from "../styles/CheckListItem.module.css";
 
 type Props = {
   title: string;
@@ -8,18 +9,13 @@ type Props = {
 const CheckListItem: FC<Props> = ({ title, deleteItem }) => {
   const [checked, setChecked] = useState(false);
   return (
-    <div>
+    <div className={styles.grid}>
       <input
         type="checkbox"
         checked={checked}
         onChange={() => setChecked(!checked)}
       ></input>
-      <span
-        style={{
-          color: checked ? "grey" : "black",
-          textDecorationLine: checked ? "line-through" : "none",
-        }}
-      >
+      <span className={checked ? `${styles.done}` : `${styles.active}`}>
         {title}
       </span>
       <button
