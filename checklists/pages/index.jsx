@@ -7,7 +7,18 @@ import { useState } from "react";
 export default function Home() {
   const [itemList, setItemList] = useState([]);
   const addCheckListItem = (title) => {
-    setItemList([...itemList, title]);
+    setItemList([
+      ...itemList,
+      <Check_item
+        title={title}
+        deleteItem={() =>
+          setItemList(itemList.filter((item) => item.title !== title))
+        }
+      ></Check_item>,
+    ]);
+  };
+  const deleteAllCheckListItem = () => {
+    setItemList([]);
   };
   return (
     <div className={styles.container}>
@@ -18,12 +29,14 @@ export default function Home() {
 
       <main>
         <h1 className={styles.title}>チェックリスト管理</h1>
-        <Check_item title="test"></Check_item>
 
         <p className={styles.description}>
           追加したいチェックリストを入力してください。
-          <TextBox onSubmit={addCheckListItem} />
         </p>
+        <TextBox
+          addItem={addCheckListItem}
+          deleteAll={deleteAllCheckListItem}
+        />
 
         {itemList.map((item, index) => (
           <div key={index}>{item}</div>

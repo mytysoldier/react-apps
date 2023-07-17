@@ -1,10 +1,11 @@
 import { FC, useState } from "react";
 
 type Props = {
-  title?: string;
+  title: string;
+  deleteItem: (text: string) => void;
 };
 
-const Check_item: FC<Props> = ({ title }) => {
+const Check_item: FC<Props> = ({ title, deleteItem }) => {
   const [checked, setChecked] = useState(false);
   return (
     <div>
@@ -13,7 +14,21 @@ const Check_item: FC<Props> = ({ title }) => {
         checked={checked}
         onChange={() => setChecked(!checked)}
       ></input>
-      {title}
+      <span
+        style={{
+          color: checked ? "grey" : "black",
+          textDecorationLine: checked ? "line-through" : "none",
+        }}
+      >
+        {title}
+      </span>
+      <button
+        onClick={() => {
+          deleteItem(title);
+        }}
+      >
+        削除
+      </button>
     </div>
   );
 };
