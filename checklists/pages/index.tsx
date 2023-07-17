@@ -1,24 +1,16 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import Check_item from "../components/check_item";
 import TextBox from "../components/textbox";
 import { useState } from "react";
+import CheckListItem from "../components/check_item";
 
 export default function Home() {
-  const [itemList, setItemList] = useState([]);
-  const addCheckListItem = (title) => {
-    setItemList([
-      ...itemList,
-      <Check_item
-        title={title}
-        deleteItem={() =>
-          setItemList(itemList.filter((item) => item.title !== title))
-        }
-      ></Check_item>,
-    ]);
+  const [titleList, setTitleList] = useState([]);
+  const addCheckListItem = (title: string) => {
+    setTitleList([...titleList, title]);
   };
   const deleteAllCheckListItem = () => {
-    setItemList([]);
+    setTitleList([]);
   };
   return (
     <div className={styles.container}>
@@ -38,8 +30,19 @@ export default function Home() {
           deleteAll={deleteAllCheckListItem}
         />
 
-        {itemList.map((item, index) => (
-          <div key={index}>{item}</div>
+        {titleList.map((title, index) => (
+          <div key={index}>
+            <CheckListItem
+              title={title}
+              deleteItem={() =>
+                setTitleList(
+                  titleList.filter(
+                    (filtered_title: string) => filtered_title !== title
+                  )
+                )
+              }
+            ></CheckListItem>
+          </div>
         ))}
       </main>
 

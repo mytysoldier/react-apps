@@ -5,7 +5,7 @@ type Props = {
   deleteItem: (text: string) => void;
 };
 
-const Check_item: FC<Props> = ({ title, deleteItem }) => {
+const CheckListItem: FC<Props> = ({ title, deleteItem }) => {
   const [checked, setChecked] = useState(false);
   return (
     <div>
@@ -33,4 +33,4 @@ const Check_item: FC<Props> = ({ title, deleteItem }) => {
   );
 };
 
-export default Check_item;
+export default CheckListItem;
