@@ -1,15 +1,23 @@
-import { FC, useState } from "react";
+import { FC, MouseEventHandler, useState } from "react";
 
 type Props = {
-  onSubmit?: () => void;
+  onSubmit?: (text: string) => void;
 };
 
 const TextBox: FC<Props> = ({ onSubmit }) => {
+  const [text, setText] = useState("");
+  const handleOnClickAdd = (text: string) => {
+    onSubmit(text);
+  };
   return (
-    <div>
-      <input type="text"></input>
-      <button onClick={onSubmit}>追加</button>
-    </div>
+    <>
+      <input
+        type="text"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+      ></input>
+      <button onClick={() => handleOnClickAdd(text)}>追加</button>
+    </>
   );
 };
 

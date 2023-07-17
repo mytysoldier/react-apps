@@ -5,7 +5,10 @@ import TextBox from "../components/textbox";
 import { useState } from "react";
 
 export default function Home() {
-  const [itemList, setItemList] = useState(["test"]);
+  const [itemList, setItemList] = useState([]);
+  const addCheckListItem = (title) => {
+    setItemList([...itemList, title]);
+  };
   return (
     <div className={styles.container}>
       <Head>
@@ -19,24 +22,13 @@ export default function Home() {
 
         <p className={styles.description}>
           追加したいチェックリストを入力してください。
-          <TextBox />
+          <TextBox onSubmit={addCheckListItem} />
         </p>
 
-        {itemList.map((item) => (
-          <p>{item}</p>
+        {itemList.map((item, index) => (
+          <div key={index}>{item}</div>
         ))}
       </main>
-
-      <footer>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{" "}
-          <img src="/vercel.svg" alt="Vercel" className={styles.logo} />
-        </a>
-      </footer>
 
       <style jsx>{`
         main {
