@@ -28,7 +28,7 @@ export const UserSearchResult: React.FC<Props> = ({ users }) => {
               <td>{user.type}</td>
               <td>{user.status}</td>
               <td>
-                <Link href="/user_detail/user_detail">
+                <Link href={`/user_detail/user_detail?id=${user.id}`}>
                   ユーザーデータを見る
                 </Link>
               </td>
