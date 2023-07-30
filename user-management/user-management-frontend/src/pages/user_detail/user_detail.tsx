@@ -1,47 +1,77 @@
 import { User } from "@/types/user";
-import { GetStaticProps, GetStaticPropsContext } from "next";
+import {
+  GetServerSideProps,
+  GetStaticProps,
+  GetStaticPropsContext,
+} from "next";
 import Link from "next/link";
 
 type Props = {
-  user?: User;
+  user?: User | null;
 };
 
 // ダミーデータの非同期取得
 const getData = async (user_id: string) => {
   try {
+    console.log("API request");
+    console.log(`user id: ${user_id}`);
     const response = await fetch(`http://127.0.0.1:8000/user?id=${user_id}`);
-    const jsonData = (await response.json()) as User;
-    return jsonData;
+    const responseData = await response.json();
+    console.log(`response: ${JSON.stringify(responseData)}`);
+
+    if (responseData.length > 0) {
+      // レスポンスから"user"を取り出してUser型に変換
+      const user: User = responseData[0];
+      return user;
+    } else {
+      // レスポンスに"user"が含まれていない場合はnullを返す
+      return null;
+    }
   } catch (e) {
     console.error("APIリクエストエラー:", e);
-    // return {};
   }
-  // // 仮に非同期処理をここで実行し、データを取得するとします
-  // // この例ではダミーデータを返す
-  // const dummyData: User[] = [
-  //   { id: "1", name: "John Doe", type: "一般", status: "有効" },
-  //   { id: "2", name: "Jane Smith", type: "一般", status: "有効" },
-  //   { id: "3", name: "Bob Johnson", type: "一般", status: "有効" },
-  // ];
-  // return dummyData[0];
 };
 
-export const getStaticProps: GetStaticProps<Props> = async (
-  context: GetStaticPropsContext
+// export const getStaticProps: GetStaticProps<Props> = async (
+//   context: GetStaticPropsContext
+// ) => {
+//   const { params } = context;
+//   // const { id } = context.params?.id as string;
+//   console.log(`params: ${params}`);
+//   const id = params?.id;
+//   // データを取得
+//   const user = await getData(id as string);
+
+//   return {
+//     props: {
+//       user,
+//     },
+//   };
+// };
+
+export const getServerSideProps: GetServerSideProps<Props> = async (
+  context
 ) => {
-  // const { id } = context.params?.id as string;
-  const { id } = context.params?.id || "";
+  const { query } = context;
+  const { id } = query;
+
   // データを取得
   const user = await getData(id as string);
 
   return {
     props: {
-      user,
+      user: user || null,
     },
   };
 };
 
 const UserDetail: React.FC<Props> = ({ user }) => {
+  console.log(`user: ${user}`);
+  if (!user) {
+    // ユーザーが存在しない場合の処理
+    return <div>ユーザーが見つかりません。</div>;
+  }
+
   return (
     <>
       <h2>ユーザー詳細</h2>
