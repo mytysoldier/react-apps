@@ -1,4 +1,5 @@
 import { User } from "@/types/user";
+import Link from "next/link";
 import React from "react";
 
 type Props = {
@@ -26,7 +27,11 @@ export const UserSearchResult: React.FC<Props> = ({ users }) => {
               <td>{user.name}</td>
               <td>{user.type}</td>
               <td>{user.status}</td>
-              <td>ユーザーデータを見る</td>
+              <td>
+                <Link href="/user_detail/user_detail">
+                  ユーザーデータを見る
+                </Link>
+              </td>
             </tr>
           ))}
         </tbody>
