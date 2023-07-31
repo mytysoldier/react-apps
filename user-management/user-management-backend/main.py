@@ -28,7 +28,9 @@ dummyUserData = [
 async def users():
     return dummyUserData
 
+
 @app.get("/user")
 async def user(id: str = Query(...)):
     target_user = [user for user in dummyUserData if user["id"] == id]
+    target_user = target_user[0] if len(target_user) > 0 else None
     return target_user

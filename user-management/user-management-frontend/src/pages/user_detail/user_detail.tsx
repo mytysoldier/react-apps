@@ -1,20 +1,14 @@
 import { User } from "@/types/user";
-import {
-  GetServerSideProps,
-  GetStaticProps,
-  GetStaticPropsContext,
-} from "next";
+import { GetServerSideProps } from "next";
 import Link from "next/link";
 
 type Props = {
   user?: User | null;
 };
 
-// ダミーデータの非同期取得
+// user_idをキーにユーザーデータを非同期取得
 const getData = async (user_id: string) => {
   try {
-    console.log("API request");
-    console.log(`user id: ${user_id}`);
     const response = await fetch(`http://127.0.0.1:8000/user?id=${user_id}`);
     const responseData = await response.json();
     console.log(`response: ${JSON.stringify(responseData)}`);
@@ -31,23 +25,6 @@ const getData = async (user_id: string) => {
     console.error("APIリクエストエラー:", e);
   }
 };
-
-// export const getStaticProps: GetStaticProps<Props> = async (
-//   context: GetStaticPropsContext
-// ) => {
-//   const { params } = context;
-//   // const { id } = context.params?.id as string;
-//   console.log(`params: ${params}`);
-//   const id = params?.id;
-//   // データを取得
-//   const user = await getData(id as string);
-
-//   return {
-//     props: {
-//       user,
-//     },
-//   };
-// };
 
 export const getServerSideProps: GetServerSideProps<Props> = async (
   context
@@ -66,10 +43,17 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
 };
 
 const UserDetail: React.FC<Props> = ({ user }) => {
-  console.log(`user: ${user}`);
   if (!user) {
-    // ユーザーが存在しない場合の処理
-    return <div>ユーザーが見つかりません。</div>;
+    return (
+      <>
+        <div>ユーザーが見つかりません。</div>
+        <div>
+          <Link href="/user_detail/user_edit">
+            <button>編集</button>
+          </Link>
+        </div>
+      </>
+    );
   }
 
   return (
@@ -80,19 +64,19 @@ const UserDetail: React.FC<Props> = ({ user }) => {
           <tbody>
             <tr>
               <td>ユーザーID</td>
-              <td>{user?.id}</td>
+              <td>{user.id}</td>
             </tr>
             <tr>
               <td>ユーザー名</td>
-              <td>{user?.name}</td>
+              <td>{user.name}</td>
             </tr>
             <tr>
               <td>ユーザー種別</td>
-              <td>{user?.type}</td>
+              <td>{user.type}</td>
             </tr>
             <tr>
               <td>ステータス</td>
-              <td>{user?.status}</td>
+              <td>{user.status}</td>
             </tr>
           </tbody>
         </table>
