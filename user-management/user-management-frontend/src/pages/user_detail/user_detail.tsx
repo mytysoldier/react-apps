@@ -13,9 +13,9 @@ const getData = async (user_id: string) => {
     const responseData = await response.json();
     console.log(`response: ${JSON.stringify(responseData)}`);
 
-    if (responseData.length > 0) {
+    if (responseData) {
       // レスポンスから"user"を取り出してUser型に変換
-      const user: User = responseData[0];
+      const user: User = responseData;
       return user;
     } else {
       // レスポンスに"user"が含まれていない場合はnullを返す
