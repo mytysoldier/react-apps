@@ -1,36 +1,60 @@
 import { User } from "@/types/user";
-import { GetStaticProps } from "next";
+import { GetServerSideProps, GetStaticProps } from "next";
 import Link from "next/link";
-import React, { FC } from "react";
+import React from "react";
 
 type Props = {
-  user: User;
+  user?: User | null;
 };
 
-// ダミーデータの非同期取得
-const getData = async () => {
-  // 仮に非同期処理をここで実行し、データを取得するとします
-  // この例ではダミーデータを返す
-  const dummyData: User[] = [
-    { id: "1", name: "John Doe", type: "一般", status: "有効" },
-    { id: "2", name: "Jane Smith", type: "一般", status: "有効" },
-    { id: "3", name: "Bob Johnson", type: "一般", status: "有効" },
-  ];
-  return dummyData[0];
+// user_idをキーにユーザーデータを非同期取得
+const getData = async (user_id: string) => {
+  try {
+    const response = await fetch(`http://127.0.0.1:8000/user?id=${user_id}`);
+    const responseData = await response.json();
+
+    if (responseData) {
+      // レスポンスがnullでなければUser型に変換
+      const user: User = responseData;
+      return user;
+    } else {
+      return null;
+    }
+  } catch (e) {
+    console.error("APIリクエストエラー:", e);
+  }
 };
 
-export const getStaticProps: GetStaticProps<Props> = async () => {
+export const getServerSideProps: GetServerSideProps<Props> = async (
+  context
+) => {
+  const { query } = context;
+  const { id } = query;
+
   // データを取得
-  const user = await getData();
+  const user = await getData(id as string);
 
   return {
     props: {
-      user,
+      user: user || null,
     },
   };
 };
 
 const UserEdit: React.FC<Props> = ({ user }) => {
+  if (!user) {
+    return (
+      <>
+        <div>ユーザーが見つかりません。</div>
+        <div>
+          <Link href="/user_detail/user_edit">
+            <button>編集</button>
+          </Link>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <h2>ユーザー編集</h2>

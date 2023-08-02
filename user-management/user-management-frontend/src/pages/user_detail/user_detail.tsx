@@ -11,14 +11,12 @@ const getData = async (user_id: string) => {
   try {
     const response = await fetch(`http://127.0.0.1:8000/user?id=${user_id}`);
     const responseData = await response.json();
-    console.log(`response: ${JSON.stringify(responseData)}`);
 
     if (responseData) {
-      // レスポンスから"user"を取り出してUser型に変換
+      // レスポンスがnullでなければUser型に変換
       const user: User = responseData;
       return user;
     } else {
-      // レスポンスに"user"が含まれていない場合はnullを返す
       return null;
     }
   } catch (e) {
@@ -84,7 +82,7 @@ const UserDetail: React.FC<Props> = ({ user }) => {
 
       <div>
         <button>削除</button>
-        <Link href="/user_detail/user_edit">
+        <Link href={`/user_detail/user_edit?id=${user.id}`}>
           <button>編集</button>
         </Link>
       </div>
