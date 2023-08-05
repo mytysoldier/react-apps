@@ -46,10 +46,10 @@ async def user(id: str = Query(...)):
 
 
 # ドキュメントを挿入するエンドポイント
-@app.post("/create_document")
+@app.post("/create_user")
 async def create_document(data: dict = Body(...)):
     try:
-        collection = db["user"]  # 任意のコレクション名
+        collection = db["user"]
         result = collection.insert_one(data)
         return {"message": "Document created", "document_id": str(result.inserted_id)}
     except Exception as e:
