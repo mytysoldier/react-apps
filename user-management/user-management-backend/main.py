@@ -1,8 +1,17 @@
+from http.client import HTTPException
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.params import Body
+from pymongo import MongoClient
 
 app = FastAPI()
 
+# MongoDBの接続情報
+MONGO_URI = "mongodb://root:password@mongodb:27017/"  # Docker ComposeでのMongoDBコンテナ名を指定
+
+# MongoDBへの接続
+client = MongoClient(MONGO_URI)
+db = client["mydatabase"]
 
 # CORS設定を追加
 origins = [
@@ -34,3 +43,14 @@ async def user(id: str = Query(...)):
     target_user = [user for user in dummyUserData if user["id"] == id]
     target_user = target_user[0] if len(target_user) > 0 else None
     return target_user
+
+
+# ドキュメントを挿入するエンドポイント
+@app.post("/create_document")
+async def create_document(data: dict = Body(...)):
+    try:
+        collection = db["user"]  # 任意のコレクション名
+        result = collection.insert_one(data)
+        return {"message": "Document created", "document_id": str(result.inserted_id)}
+    except Exception as e:
+        return HTTPException(status_code=500, detail=str(e))
