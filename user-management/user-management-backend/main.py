@@ -37,7 +37,10 @@ dummyUserData = [
 
 @app.get("/users")
 async def users():
-    result_cursor = user_collection.find()
+    # projectionを指定して_idフィールドを非表示にする
+    projection = {"_id": 0}
+
+    result_cursor = user_collection.find({}, projection)
     result_list = list(result_cursor)
     # JSON形式に変換して返却
     return dumps(result_list, ensure_ascii=False)
@@ -46,7 +49,10 @@ async def users():
 @app.get("/user")
 async def user(id: int = Query(...)):
     query = {"id": id}
-    result = user_collection.find_one(query)
+    # projectionを指定して_idフィールドを非表示にする
+    projection = {"_id": 0}
+
+    result = user_collection.find_one(query, projection)
     # target_user = [user for user in dummyUserData if user["id"] == id]
     # target_user = target_user[0] if len(target_user) > 0 else None
     if result is not None:
