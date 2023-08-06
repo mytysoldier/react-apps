@@ -3,6 +3,7 @@ from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.params import Body
 from pymongo import MongoClient
+from bson.json_util import dumps
 
 app = FastAPI()
 
@@ -36,14 +37,22 @@ dummyUserData = [
 
 @app.get("/users")
 async def users():
-    return dummyUserData
+    result_cursor = user_collection.find()
+    result_list = list(result_cursor)
+    # JSON形式に変換して返却
+    return dumps(result_list, ensure_ascii=False)
 
 
 @app.get("/user")
-async def user(id: str = Query(...)):
-    target_user = [user for user in dummyUserData if user["id"] == id]
-    target_user = target_user[0] if len(target_user) > 0 else None
-    return target_user
+async def user(id: int = Query(...)):
+    query = {"id": id}
+    result = user_collection.find_one(query)
+    # target_user = [user for user in dummyUserData if user["id"] == id]
+    # target_user = target_user[0] if len(target_user) > 0 else None
+    if result is not None:
+        return dumps(result, ensure_ascii=False)
+    else:
+        return {"message": "User not found"}
 
 
 @app.post("/user")
@@ -59,9 +68,17 @@ async def insert_user(data: dict = Body(...)):
 @app.put("/user")
 async def update_user(data: dict = Body(...)):
     try:
-        result = user_collection.update_one(data)
+        query = {"id": data["id"]}
+        operation = {
+            "$set": {
+                "name": data["name"],
+                "type": data["type"],
+                "status": data["status"],
+            }
+        }
+        result = user_collection.update_one(query, operation)
         print(result)
-        return {"message": "Document created", "document_id": str(result.inserted_id)}
+        return result.modified_count
     except Exception as e:
         return HTTPException(status_code=500, detail=str(e))
 
