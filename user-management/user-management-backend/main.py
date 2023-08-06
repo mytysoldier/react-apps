@@ -12,6 +12,7 @@ MONGO_URI = "mongodb://root:password@mongodb:27017/"  # Docker ComposeでのMong
 # MongoDBへの接続
 client = MongoClient(MONGO_URI)
 db = client["mydatabase"]
+user_collection = db["user"]
 
 # CORS設定を追加
 origins = [
@@ -45,12 +46,31 @@ async def user(id: str = Query(...)):
     return target_user
 
 
-# ドキュメントを挿入するエンドポイント
-@app.post("/create_user")
-async def create_document(data: dict = Body(...)):
+@app.post("/user")
+async def insert_user(data: dict = Body(...)):
     try:
-        collection = db["user"]
-        result = collection.insert_one(data)
+        result = user_collection.insert_one(data)
+        print(result)
         return {"message": "Document created", "document_id": str(result.inserted_id)}
+    except Exception as e:
+        return HTTPException(status_code=500, detail=str(e))
+
+
+@app.put("/user")
+async def update_user(data: dict = Body(...)):
+    try:
+        result = user_collection.update_one(data)
+        print(result)
+        return {"message": "Document created", "document_id": str(result.inserted_id)}
+    except Exception as e:
+        return HTTPException(status_code=500, detail=str(e))
+
+
+@app.delete("/user/")
+async def delete_user(id: int = 0):
+    try:
+        query = {"id": id}
+        result = user_collection.delete_one(query)
+        return result.deleted_count
     except Exception as e:
         return HTTPException(status_code=500, detail=str(e))
