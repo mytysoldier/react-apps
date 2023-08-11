@@ -14,7 +14,8 @@ const getData = async (user_id: string) => {
 
     if (responseData) {
       // レスポンスがnullでなければUser型に変換
-      const user: User = JSON.parse(responseData);
+      const { _id, ...rest } = JSON.parse(responseData);
+      const user: User = { id: _id.$oid, ...rest };
       return user;
     } else {
       return null;

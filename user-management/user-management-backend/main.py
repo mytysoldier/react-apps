@@ -1,4 +1,5 @@
 from http.client import HTTPException
+from bson import ObjectId
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.params import Body
@@ -38,21 +39,23 @@ dummyUserData = [
 @app.get("/users")
 async def users():
     # projectionを指定して_idフィールドを非表示にする
-    projection = {"_id": 0}
+    # projection = {"_id": 0}
 
-    result_cursor = user_collection.find({}, projection)
+    # result_cursor = user_collection.find({}, projection)
+    result_cursor = user_collection.find({})
     result_list = list(result_cursor)
     # JSON形式に変換して返却
     return dumps(result_list, ensure_ascii=False)
 
 
 @app.get("/user")
-async def user(id: int = Query(...)):
-    query = {"id": id}
+async def user(id: str = Query(...)):
+    query = {"_id": ObjectId(id)}
     # projectionを指定して_idフィールドを非表示にする
-    projection = {"_id": 0}
+    # projection = {"_id": 0}
 
-    result = user_collection.find_one(query, projection)
+    # result = user_collection.find_one(query, projection)
+    result = user_collection.find_one(query)
     # target_user = [user for user in dummyUserData if user["id"] == id]
     # target_user = target_user[0] if len(target_user) > 0 else None
     if result is not None:
@@ -74,7 +77,7 @@ async def insert_user(data: dict = Body(...)):
 @app.put("/user")
 async def update_user(data: dict = Body(...)):
     try:
-        query = {"id": data["id"]}
+        query = {"_id": ObjectId(data["id"])}
         operation = {
             "$set": {
                 "name": data["name"],
@@ -89,10 +92,10 @@ async def update_user(data: dict = Body(...)):
         return HTTPException(status_code=500, detail=str(e))
 
 
-@app.delete("/user/")
-async def delete_user(id: int = 0):
+@app.delete("/user")
+async def delete_user(id: str = 0):
     try:
-        query = {"id": id}
+        query = {"_id": ObjectId(id)}
         result = user_collection.delete_one(query)
         return result.deleted_count
     except Exception as e:

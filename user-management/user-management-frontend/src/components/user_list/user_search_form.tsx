@@ -1,4 +1,5 @@
 import { UserStatus, UserType } from "@/types/user";
+import Link from "next/link";
 import React, { useState } from "react";
 
 type Props = {
@@ -70,6 +71,11 @@ export const UserSearchForm: React.FC<Props> = ({ onClickSearch }) => {
       <button onClick={onClickSearch} className="bg-blue-500">
         検索
       </button>
+      <div>
+        <Link href="/user_add/user_add">
+          <button className="bg-blue-500">ユーザー追加</button>
+        </Link>
+      </div>
     </>
   );
 };
