@@ -11,12 +11,8 @@ export default function UserList() {
   const handleSearchUser = async () => {
     try {
       const response = await fetch("http://127.0.0.1:8000/users");
-      console.log(`response: ${response}`);
       const jsonData = JSON.parse(await response.json()) as User[];
-      // const jsonData2 = (await response.json()) as User[];
-      console.log(`jsonData: ${jsonData}`);
-      console.log(typeof jsonData);
-      jsonData.map((data) => console.log(`data: ${data}`));
+      // 一覧を更新
       setUsers(jsonData);
     } catch (e) {
       console.error("APIリクエストエラー:", e);
