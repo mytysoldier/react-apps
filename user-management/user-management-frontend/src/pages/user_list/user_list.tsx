@@ -1,6 +1,8 @@
+import { Button } from "@/components/common/button";
 import { UserSearchForm } from "@/components/user_list/user_search_form";
 import { UserSearchResult } from "@/components/user_list/user_search_result";
 import { User } from "@/types/user";
+import Link from "next/link";
 import { useState } from "react";
 
 export default function UserList() {
@@ -25,10 +27,27 @@ export default function UserList() {
   };
 
   return (
-    <>
-      <h1>ユーザー管理</h1>
-      <UserSearchForm onClickSearch={handleSearchUser} />
-      <UserSearchResult users={users} />
-    </>
+    <div className="grid">
+      <div className="w-4/5 bg-white place-self-center px-4 py-4">
+        <div className="">
+          <div className="flex justify-between">
+            <div className="text-lg">ユーザー管理</div>
+            <div className="">
+              <Link href="/user_add/user_add">
+                <Button text="ユーザー追加" onClick={() => {}} />
+              </Link>
+            </div>
+          </div>
+          <UserSearchForm onClickSearch={handleSearchUser} />
+        </div>
+      </div>
+      {users.length != 0 ? (
+        <div className="mt-8 w-4/5 bg-white place-self-center px-4 py-4">
+          <UserSearchResult users={users} />
+        </div>
+      ) : (
+        <></>
+      )}
+    </div>
   );
 }

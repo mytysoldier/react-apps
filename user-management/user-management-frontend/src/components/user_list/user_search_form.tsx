@@ -1,6 +1,6 @@
 import { UserStatus, UserType } from "@/types/user";
-import Link from "next/link";
 import React, { useState } from "react";
+import { Button } from "../common/button";
 
 type Props = {
   onClickSearch: () => void;
@@ -33,7 +33,7 @@ export const UserSearchForm: React.FC<Props> = ({ onClickSearch }) => {
 
   return (
     <>
-      <div>
+      <div className="py-4">
         <h3>ユーザーID</h3>
         <input
           type="text"
@@ -43,7 +43,7 @@ export const UserSearchForm: React.FC<Props> = ({ onClickSearch }) => {
         />
       </div>
 
-      <div className="flex gap-6">
+      <div className="flex gap-6 py-4">
         <div>
           <h3>ユーザー種別</h3>
           <select value={userType} onChange={handleUserTypeSelected}>
@@ -68,13 +68,9 @@ export const UserSearchForm: React.FC<Props> = ({ onClickSearch }) => {
           </select>
         </div>
       </div>
-      <button onClick={onClickSearch} className="bg-blue-500">
-        検索
-      </button>
-      <div>
-        <Link href="/user_add/user_add">
-          <button className="bg-blue-500">ユーザー追加</button>
-        </Link>
+
+      <div className="flex justify-end">
+        <Button text="検索" onClick={onClickSearch} />
       </div>
     </>
   );
