@@ -1,3 +1,4 @@
+import { Button } from "@/components/common/button";
 import { userStatusItems, userTypeItems } from "@/constant/constant";
 import { User, UserStatus, UserType } from "@/types/user";
 import { GetServerSideProps, GetStaticProps } from "next";
@@ -119,61 +120,75 @@ const UserEdit: React.FC<Props> = ({ user }) => {
   };
 
   return (
-    <>
-      <h2>ユーザー編集</h2>
-      <div>
-        <table>
-          <tbody>
-            <tr>
-              <td>ユーザーID</td>
-              <td>{user.id}</td>
-            </tr>
-            <tr>
-              <td>ユーザー名</td>
-              <td>
-                <input
-                  type="text"
-                  value={userName}
-                  onChange={(e) => setUserName(e.target.value)}
-                  className="border w-full"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>ユーザー種別</td>
-              <td>
-                <select value={userType} onChange={handleUserTypeSelected}>
-                  {userTypeItems.map((item, index) => (
-                    <option key={index} value={item}>
-                      {item}
-                    </option>
-                  ))}
-                </select>
-              </td>
-            </tr>
-            <tr>
-              <td>ステータス</td>
-              <select value={userStatus} onChange={handleUserStatusSelected}>
-                {userStatusItems.map((item, index) => (
-                  <option key={index} value={item}>
-                    {item}
-                  </option>
-                ))}
-              </select>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <div className="h-screen bg-slate-300">
+      <div className="grid">
+        <div className="w-4/5 bg-white rounded place-self-center px-4 py-4">
+          <div className="flex justify-between pb-4 border-b-2">
+            <div className="text-lg">ユーザー編集</div>
+            <div>
+              <Link href="/">
+                <Button text="戻る" onClick={() => {}} />
+              </Link>
+            </div>
+          </div>
+          <div className="py-4">
+            <table className="table-auto border border-slate-300 w-full">
+              <tbody>
+                <tr className="h-14">
+                  <td className="bg-slate-300">ユーザーID</td>
+                  <td>{user.id}</td>
+                </tr>
+                <tr className="h-14">
+                  <td className="bg-slate-300">ユーザー名</td>
+                  <td>
+                    <input
+                      type="text"
+                      value={userName}
+                      onChange={(e) => setUserName(e.target.value)}
+                      className="border w-full"
+                    />
+                  </td>
+                </tr>
+                <tr className="h-14">
+                  <td className="bg-slate-300">ユーザー種別</td>
+                  <td>
+                    <select value={userType} onChange={handleUserTypeSelected}>
+                      {userTypeItems.map((item, index) => (
+                        <option key={index} value={item}>
+                          {item}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                </tr>
+                <tr className="h-14">
+                  <td className="bg-slate-300">ステータス</td>
+                  <select
+                    value={userStatus}
+                    onChange={handleUserStatusSelected}
+                  >
+                    {userStatusItems.map((item, index) => (
+                      <option key={index} value={item}>
+                        {item}
+                      </option>
+                    ))}
+                  </select>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-      <div>
-        <button onClick={() => handleDeleteUser(user.id)}>削除</button>
-        <button onClick={handleUpdateUser}>更新</button>
+          <div className="flex justify-end gap-2">
+            <div>
+              <Button text="削除" onClick={() => handleDeleteUser(user.id)} />
+            </div>
+            <div>
+              <Button text="更新" onClick={handleUpdateUser} />
+            </div>
+          </div>
+        </div>
       </div>
-
-      <h2>
-        <Link href="/">戻る</Link>
-      </h2>
-    </>
+    </div>
   );
 };
 
