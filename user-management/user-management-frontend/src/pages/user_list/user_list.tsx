@@ -28,9 +28,9 @@ export default function UserList() {
 
   return (
     <div className="grid">
-      <div className="w-4/5 bg-white place-self-center px-4 py-4">
+      <div className="w-4/5 bg-white rounded place-self-center px-4 py-4">
         <div className="">
-          <div className="flex justify-between">
+          <div className="flex justify-between pb-4 border-b-2">
             <div className="text-lg">ユーザー管理</div>
             <div className="">
               <Link href="/user_add/user_add">
@@ -42,7 +42,7 @@ export default function UserList() {
         </div>
       </div>
       {users.length != 0 ? (
-        <div className="mt-8 w-4/5 bg-white place-self-center px-4 py-4">
+        <div className="mt-8 w-4/5 bg-white rounded place-self-center px-4 py-4">
           <UserSearchResult users={users} />
         </div>
       ) : (
