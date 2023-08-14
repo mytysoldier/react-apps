@@ -3,17 +3,35 @@ import styles from "../styles/Home.module.css";
 import TextBox from "../components/textbox";
 import { useState } from "react";
 import CheckListItem from "../components/check_list_item";
+// import firebase from "firebase/app";
+import firebase from "firebase/compat/app";
+// import "firebase/firestore";
+import "firebase/compat/firestore";
+
+const firebaseConfig = {
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const db = firebase.firestore();
 
 export default function Home() {
   const [titleList, setTitleList] = useState<string[]>([]);
-  const addCheckListItem = (title: string) => {
+  const addCheckListItem = async (title: string) => {
     if (titleList.includes(title)) {
       // 同一タイトルのチェックリストが登録済みなら追加しない
       return;
     }
+    await db.collection("todos").add({
+      title: title,
+    });
+    // const aa = (await db.collection("todos").get()).docs;
     setTitleList([...titleList, title]);
   };
-  const deleteAllCheckListItem = () => {
+  const deleteAllCheckListItem = async () => {
     setTitleList([]);
   };
   return (
