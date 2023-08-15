@@ -1,7 +1,7 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import TextBox from "../components/textbox";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CheckListItem from "../components/check_list_item";
 // import firebase from "firebase/app";
 import firebase from "firebase/compat/app";
@@ -25,15 +25,40 @@ export default function Home() {
       // 同一タイトルのチェックリストが登録済みなら追加しない
       return;
     }
+    // DBにデータ登録
     await db.collection("todos").add({
       title: title,
     });
-    // const aa = (await db.collection("todos").get()).docs;
+    // 画面を更新
     setTitleList([...titleList, title]);
   };
   const deleteAllCheckListItem = async () => {
+    const todoDocs = (await db.collection("todos").get()).docs;
+    // DBからデータ削除
+    todoDocs.forEach(async (doc) => {
+      await doc.ref.delete();
+    });
+    // 画面を更新
     setTitleList([]);
   };
+
+  useEffect(() => {
+    const todoTitles = [] as string[];
+
+    async function fetchTodos() {
+      const todoDocs = (await db.collection("todos").get()).docs;
+      todoDocs.forEach((doc) => {
+        const data = doc.data();
+        const title = data.title as string;
+        todoTitles.push(title);
+      });
+      setTitleList([...todoTitles]);
+    }
+
+    // 画面初回描画時に登録されているTODOデータを読み込む
+    fetchTodos();
+  }, []);
+
   return (
     <div className={styles.container}>
       <Head>
