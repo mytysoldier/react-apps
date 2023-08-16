@@ -89,13 +89,9 @@ export default function Home() {
                   .collection("todos")
                   .where("title", "==", title)
                   .get();
-                console.log(
-                  `querySnapshot: ${JSON.stringify(querySnapshot.docs)}`
-                );
                 querySnapshot.forEach(async (doc) => {
                   // DBから指定のドキュメントを削除
                   await doc.ref.delete();
-                  console.log("deleted");
                 });
                 // 画面に反映
                 setTitleList(
