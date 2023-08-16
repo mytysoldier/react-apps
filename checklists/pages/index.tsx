@@ -3,9 +3,7 @@ import styles from "../styles/Home.module.css";
 import TextBox from "../components/textbox";
 import { useEffect, useState } from "react";
 import CheckListItem from "../components/check_list_item";
-// import firebase from "firebase/app";
 import firebase from "firebase/compat/app";
-// import "firebase/firestore";
 import "firebase/compat/firestore";
 
 const firebaseConfig = {
@@ -86,13 +84,22 @@ export default function Home() {
           <div key={index}>
             <CheckListItem
               title={title}
-              deleteItem={() =>
+              deleteItem={async () => {
+                const querySnapshot = await db
+                  .collection("todos")
+                  .where("title", "==", title)
+                  .get();
+                querySnapshot.forEach(async (doc) => {
+                  // DBから指定のドキュメントを削除
+                  await doc.ref.delete();
+                });
+                // 画面に反映
                 setTitleList(
                   titleList.filter(
                     (filtered_title: string) => filtered_title !== title
                   )
-                )
-              }
+                );
+              }}
             ></CheckListItem>
           </div>
         ))}
