@@ -1,7 +1,12 @@
 import { Button } from "@/components/common/button";
-import { userStatusItems, userTypeItems } from "@/constant/constant";
+import {
+  allSearchItem,
+  userStatusItems,
+  userTypeItems,
+} from "@/constant/constant";
 import { User, UserStatus, UserType } from "@/types/user";
 import Link from "next/link";
+import router from "next/router";
 import { useState } from "react";
 
 export default function UserAdd() {
@@ -38,6 +43,8 @@ export default function UserAdd() {
 
       if (response.status == 200) {
         alert("データが登録されました。");
+        // ホームに戻す
+        router.push("/");
       } else {
         console.error(`ユーザーデータ登録失敗: statusCode: ${response.status}`);
       }
@@ -69,6 +76,7 @@ export default function UserAdd() {
                       value={userName}
                       onChange={(e) => setUserName(e.target.value)}
                       className="border-none w-full h-14"
+                      placeholder="名前を入力してください"
                     />
                   </td>
                 </tr>
@@ -76,11 +84,13 @@ export default function UserAdd() {
                   <td className="bg-slate-300">ユーザー種別</td>
                   <td>
                     <select value={userType} onChange={handleUserTypeSelected}>
-                      {userTypeItems.map((item, index) => (
-                        <option key={index} value={item}>
-                          {item}
-                        </option>
-                      ))}
+                      {userTypeItems
+                        .filter((item) => item !== allSearchItem)
+                        .map((item, index) => (
+                          <option key={index} value={item}>
+                            {item}
+                          </option>
+                        ))}
                     </select>
                   </td>
                 </tr>
@@ -91,11 +101,13 @@ export default function UserAdd() {
                       value={userStatus}
                       onChange={handleUserStatusSelected}
                     >
-                      {userStatusItems.map((item, index) => (
-                        <option key={index} value={item}>
-                          {item}
-                        </option>
-                      ))}
+                      {userStatusItems
+                        .filter((item) => item !== allSearchItem)
+                        .map((item, index) => (
+                          <option key={index} value={item}>
+                            {item}
+                          </option>
+                        ))}
                     </select>
                   </td>
                 </tr>

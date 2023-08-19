@@ -1,6 +1,7 @@
 import { UserStatus, UserType } from "@/types/user";
 import React, { useState } from "react";
 import { Button } from "../common/button";
+import { userStatusItems, userTypeItems } from "@/constant/constant";
 
 type Props = {
   onClickSearch: () => void;
@@ -10,14 +11,11 @@ export const UserSearchForm: React.FC<Props> = ({ onClickSearch }) => {
   // ユーザーIDでの検索パラメーター保持用
   const [userId, setUserId] = useState("");
   // ユーザー種別での検索パラメーター保持用
-  const [userType, setUserType] = useState<UserType>("一般");
+  const [userType, setUserType] = useState<UserType | "全件検索">("全件検索");
   // ユーザー状態での検索パラメーター保持用
-  const [userStatus, setUserStatus] = useState<UserStatus>("有効");
-
-  // ユーザー種別プルダウンリストのアイテム一覧
-  const userTypeItems = ["一般", "管理者"];
-  // ユーザー状態プルダウンリストのアイテム一覧
-  const userStatusItems = ["有効", "無効"];
+  const [userStatus, setUserStatus] = useState<UserStatus | "全件検索">(
+    "全件検索"
+  );
 
   const handleUserTypeSelected = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedUserType = e.target.value as UserType;
@@ -55,7 +53,6 @@ export const UserSearchForm: React.FC<Props> = ({ onClickSearch }) => {
               onChange={handleUserTypeSelected}
               className="border rounded px-4 py-2 w-full"
             >
-              <option value="">全件検索</option>
               {userTypeItems.map((item, index) => (
                 <option key={index} value={item}>
                   {item}
@@ -73,7 +70,6 @@ export const UserSearchForm: React.FC<Props> = ({ onClickSearch }) => {
               onChange={handleUserStatusSelected}
               className="border rounded px-4 py-2 w-full"
             >
-              <option value="">全件検索</option>
               {userStatusItems.map((item, index) => (
                 <option key={index} value={item}>
                   {item}

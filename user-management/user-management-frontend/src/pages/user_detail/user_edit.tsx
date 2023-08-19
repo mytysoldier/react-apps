@@ -1,8 +1,9 @@
 import { Button } from "@/components/common/button";
 import { userStatusItems, userTypeItems } from "@/constant/constant";
 import { User, UserStatus, UserType } from "@/types/user";
-import { GetServerSideProps, GetStaticProps } from "next";
+import { GetServerSideProps } from "next";
 import Link from "next/link";
+import router from "next/router";
 import React, { useState } from "react";
 
 type Props = {
@@ -76,6 +77,15 @@ const UserEdit: React.FC<Props> = ({ user }) => {
   };
 
   const handleUpdateUser = async () => {
+    if (
+      userName === user.name &&
+      userType === user.type &&
+      userStatus === user.status
+    ) {
+      // 何も変更していなければ、アラート表示
+      alert("データに変更がありません。");
+      return;
+    }
     try {
       const response = await fetch("http://127.0.0.1:8000/user", {
         method: "PUT",
@@ -111,6 +121,8 @@ const UserEdit: React.FC<Props> = ({ user }) => {
 
       if (response.status == 200) {
         alert("データが削除されました。");
+        // ホームに戻す
+        router.push("/");
       } else {
         console.error(`ユーザーデータ更新失敗: statusCode: ${response.status}`);
       }
@@ -145,7 +157,7 @@ const UserEdit: React.FC<Props> = ({ user }) => {
                       type="text"
                       value={userName}
                       onChange={(e) => setUserName(e.target.value)}
-                      className="border w-full"
+                      className="w-full h-14"
                     />
                   </td>
                 </tr>
