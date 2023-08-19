@@ -1,3 +1,4 @@
+import { Button } from "@/components/common/button";
 import { userStatusItems, userTypeItems } from "@/constant/constant";
 import { User, UserStatus, UserType } from "@/types/user";
 import Link from "next/link";
@@ -46,55 +47,67 @@ export default function UserAdd() {
   };
 
   return (
-    <>
-      <h1>ユーザー追加</h1>
-      <div>
-        <table>
-          <tbody>
-            <tr>
-              <td>ユーザー名</td>
-              <td>
-                <input
-                  type="text"
-                  value={userName}
-                  onChange={(e) => setUserName(e.target.value)}
-                  className="border w-full"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>ユーザー種別</td>
-              <td>
-                <select value={userType} onChange={handleUserTypeSelected}>
-                  {userTypeItems.map((item, index) => (
-                    <option key={index} value={item}>
-                      {item}
-                    </option>
-                  ))}
-                </select>
-              </td>
-            </tr>
-            <tr>
-              <td>ステータス</td>
-              <td>
-                <select value={userStatus} onChange={handleUserStatusSelected}>
-                  {userStatusItems.map((item, index) => (
-                    <option key={index} value={item}>
-                      {item}
-                    </option>
-                  ))}
-                </select>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    <div className="h-screen bg-slate-300">
+      <div className="grid">
+        <div className="w-4/5 bg-white rounded place-self-center px-4 py-4">
+          <div className="flex justify-between pb-4 border-b-2">
+            <div className="text-lg">ユーザー追加</div>
+            <div>
+              <Link href="/">
+                <Button text="戻る" onClick={() => {}} />
+              </Link>
+            </div>
+          </div>
+          <div className="py-4">
+            <table className="table-auto border border-slate-300 w-full">
+              <tbody>
+                <tr className="h-14">
+                  <td className="bg-slate-300">ユーザー名</td>
+                  <td className="h-full">
+                    <input
+                      type="text"
+                      value={userName}
+                      onChange={(e) => setUserName(e.target.value)}
+                      className="border-none w-full h-14"
+                    />
+                  </td>
+                </tr>
+                <tr className="h-14">
+                  <td className="bg-slate-300">ユーザー種別</td>
+                  <td>
+                    <select value={userType} onChange={handleUserTypeSelected}>
+                      {userTypeItems.map((item, index) => (
+                        <option key={index} value={item}>
+                          {item}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                </tr>
+                <tr className="h-14">
+                  <td className="bg-slate-300">ステータス</td>
+                  <td>
+                    <select
+                      value={userStatus}
+                      onChange={handleUserStatusSelected}
+                    >
+                      {userStatusItems.map((item, index) => (
+                        <option key={index} value={item}>
+                          {item}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div className="flex justify-end">
+            <Button text="登録" onClick={handleSubmit} />
+          </div>
+        </div>
       </div>
-      <div>
-        <button onClick={handleSubmit}>登録</button>
-      </div>
-      <h2>
-        <Link href="/">戻る</Link>
-      </h2>
-    </>
+    </div>
   );
 }
