@@ -29,20 +29,32 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-dummyUserData = [
-    {"id": "1", "name": "John Doe", "type": "一般", "status": "有効"},
-    {"id": "2", "name": "Jane Smith", "type": "一般", "status": "有効"},
-    {"id": "3", "name": "Bob Johnson", "type": "一般", "status": "有効"},
-]
+# 送られてくるデータのサンプル
+# dummyUserData = [
+#     {"id": "1", "name": "John Doe", "type": "一般", "status": "有効"},
+#     {"id": "2", "name": "Jane Smith", "type": "一般", "status": "有効"},
+#     {"id": "3", "name": "Bob Johnson", "type": "一般", "status": "有効"},
+# ]
 
 
 @app.get("/users")
-async def users():
+async def users(
+    name: str = Query(None),
+    type: str = Query(None),
+    status: str = Query(None),
+):
+    query = {}
+    if name is not None:
+        query.update({"name": name})
+    if type is not None:
+        query.update({"type": type})
+    if status is not None:
+        query.update({"status": status})
     # projectionを指定して_idフィールドを非表示にする
     # projection = {"_id": 0}
 
     # result_cursor = user_collection.find({}, projection)
-    result_cursor = user_collection.find({})
+    result_cursor = user_collection.find(query)
     result_list = list(result_cursor)
     # JSON形式に変換して返却
     return dumps(result_list, ensure_ascii=False)
@@ -56,8 +68,6 @@ async def user(id: str = Query(...)):
 
     # result = user_collection.find_one(query, projection)
     result = user_collection.find_one(query)
-    # target_user = [user for user in dummyUserData if user["id"] == id]
-    # target_user = target_user[0] if len(target_user) > 0 else None
     if result is not None:
         return dumps(result, ensure_ascii=False)
     else:
