@@ -28,6 +28,10 @@ export default function UserAdd() {
   };
 
   const handleSubmit = async () => {
+    if (userName === "") {
+      alert("ユーザー名を入力してください。");
+      return;
+    }
     try {
       const response = await fetch("http://127.0.0.1:8000/user", {
         method: "POST",

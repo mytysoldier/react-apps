@@ -1,5 +1,10 @@
 import { Button } from "@/components/common/button";
-import { userStatusItems, userTypeItems } from "@/constant/constant";
+import { AlertModal } from "@/components/common/modal";
+import {
+  allSearchItem,
+  userStatusItems,
+  userTypeItems,
+} from "@/constant/constant";
 import { User, UserStatus, UserType } from "@/types/user";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
@@ -64,6 +69,9 @@ const UserEdit: React.FC<Props> = ({ user }) => {
   const [userType, setUserType] = useState(user.type);
   const [userStatus, setUserStatus] = useState(user.status);
 
+  // モーダル表示状態
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
   const handleUserTypeSelected = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedUserType = e.target.value as UserType;
     setUserType(selectedUserType);
@@ -111,6 +119,7 @@ const UserEdit: React.FC<Props> = ({ user }) => {
   };
 
   const handleDeleteUser = async (user_id: string) => {
+    console.log("削除");
     try {
       const response = await fetch(`http://127.0.0.1:8000/user?id=${user_id}`, {
         method: "DELETE",
@@ -165,26 +174,32 @@ const UserEdit: React.FC<Props> = ({ user }) => {
                   <td className="bg-slate-300">ユーザー種別</td>
                   <td>
                     <select value={userType} onChange={handleUserTypeSelected}>
-                      {userTypeItems.map((item, index) => (
-                        <option key={index} value={item}>
-                          {item}
-                        </option>
-                      ))}
+                      {userTypeItems
+                        .filter((item) => item !== allSearchItem)
+                        .map((item, index) => (
+                          <option key={index} value={item}>
+                            {item}
+                          </option>
+                        ))}
                     </select>
                   </td>
                 </tr>
                 <tr className="h-14">
                   <td className="bg-slate-300">ステータス</td>
-                  <select
-                    value={userStatus}
-                    onChange={handleUserStatusSelected}
-                  >
-                    {userStatusItems.map((item, index) => (
-                      <option key={index} value={item}>
-                        {item}
-                      </option>
-                    ))}
-                  </select>
+                  <td>
+                    <select
+                      value={userStatus}
+                      onChange={handleUserStatusSelected}
+                    >
+                      {userStatusItems
+                        .filter((item) => item !== allSearchItem)
+                        .map((item, index) => (
+                          <option key={index} value={item}>
+                            {item}
+                          </option>
+                        ))}
+                    </select>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -192,11 +207,20 @@ const UserEdit: React.FC<Props> = ({ user }) => {
 
           <div className="flex justify-end gap-2">
             <div>
-              <Button text="削除" onClick={() => handleDeleteUser(user.id)} />
+              <Button text="削除" onClick={() => setIsDeleteModalOpen(true)} />
             </div>
             <div>
               <Button text="更新" onClick={handleUpdateUser} />
             </div>
+          </div>
+
+          <div>
+            <AlertModal
+              isOpen={isDeleteModalOpen}
+              content="削除しますか？"
+              onClickOk={() => handleDeleteUser(user.id)}
+              onClickCancel={() => setIsDeleteModalOpen(false)}
+            />
           </div>
         </div>
       </div>
