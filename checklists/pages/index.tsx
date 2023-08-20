@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import CheckListItem from "../components/check_list_item";
 import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
+import { Todo } from "../type/todo";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -14,21 +15,22 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-const db = firebase.firestore();
+export const db = firebase.firestore();
 
 export default function Home() {
-  const [titleList, setTitleList] = useState<string[]>([]);
+  const [todoList, setTodoList] = useState<Todo[]>([]);
   const addCheckListItem = async (title: string) => {
-    if (titleList.includes(title)) {
+    if (todoList.find((todo) => todo.title === title)) {
       // 同一タイトルのチェックリストが登録済みなら追加しない
       return;
     }
     // DBにデータ登録
     await db.collection("todos").add({
       title: title,
+      isDone: false,
     });
     // 画面を更新
-    setTitleList([...titleList, title]);
+    setTodoList([...todoList, { title: title, isDone: false }]);
   };
   const deleteAllCheckListItem = async () => {
     const todoDocs = (await db.collection("todos").get()).docs;
@@ -37,20 +39,21 @@ export default function Home() {
       await doc.ref.delete();
     });
     // 画面を更新
-    setTitleList([]);
+    setTodoList([]);
   };
 
   useEffect(() => {
-    const todoTitles = [] as string[];
+    const todoTitles = [] as Todo[];
 
     async function fetchTodos() {
       const todoDocs = (await db.collection("todos").get()).docs;
       todoDocs.forEach((doc) => {
         const data = doc.data();
         const title = data.title as string;
-        todoTitles.push(title);
+        const isDone = data.isDone as boolean;
+        todoTitles.push({ title, isDone });
       });
-      setTitleList([...todoTitles]);
+      setTodoList([...todoTitles]);
     }
 
     // 画面初回描画時に登録されているTODOデータを読み込む
@@ -80,23 +83,24 @@ export default function Home() {
           deleteAll={deleteAllCheckListItem}
         />
 
-        {titleList.map((title, index) => (
+        {todoList.map((todo, index) => (
           <div key={index}>
             <CheckListItem
-              title={title}
+              title={todo.title}
+              isDone={todo.isDone}
               deleteItem={async () => {
                 const querySnapshot = await db
                   .collection("todos")
-                  .where("title", "==", title)
+                  .where("title", "==", todo.title)
                   .get();
                 querySnapshot.forEach(async (doc) => {
                   // DBから指定のドキュメントを削除
                   await doc.ref.delete();
                 });
                 // 画面に反映
-                setTitleList(
-                  titleList.filter(
-                    (filtered_title: string) => filtered_title !== title
+                setTodoList(
+                  todoList.filter(
+                    (filtered_todo: Todo) => filtered_todo.title !== todo.title
                   )
                 );
               }}

@@ -18,10 +18,17 @@ const TextBox: FC<Props> = ({ addItem, deleteAll }) => {
         onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
           if (e.key === "Enter") {
             addItem(text);
+            setText("");
           }
         }}
       ></input>
-      <button className={styles.button} onClick={() => addItem(text)}>
+      <button
+        className={styles.button}
+        onClick={() => {
+          addItem(text);
+          setText("");
+        }}
+      >
         追加
       </button>
       <button className={styles.button} onClick={deleteAll}>
