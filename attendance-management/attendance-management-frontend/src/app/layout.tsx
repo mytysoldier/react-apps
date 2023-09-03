@@ -20,12 +20,21 @@ export default function RootLayout({
     <html>
       <head />
       <body>
-        <div>
-          <Link href="/">Home</Link>
-          <Link href="/about">About</Link>
-          <Link href="/contact">Contact</Link>
+        <div className="flex">
+          <div className="flex flex-col bg-blue-950 w-40 h-screen">
+            <span className="text-lg h-10 font-thin">マイページ</span>
+            <Link href="/" className="text-lg font-bold h-10">
+              Home
+            </Link>
+            <Link href="/timecard" className="text-lg font-bold h-10">
+              打刻
+            </Link>
+            <Link href="/attendance" className="text-lg font-bold h-10">
+              出勤簿
+            </Link>
+          </div>
+          <div className="w-full">{children}</div>
         </div>
-        <div>{children}</div>
       </body>
     </html>
   );
