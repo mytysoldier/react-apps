@@ -3,7 +3,7 @@ import strawberry
 
 from db.db import initialize_db
 
-from schema.schema import Query
+from schema.schema import Query, Mutation
 from strawberry.fastapi import GraphQLRouter
 
 from fastapi.middleware.cors import CORSMiddleware
@@ -12,7 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 initialize_db()
 
 # GraphQLスキーマ
-schema = strawberry.Schema(Query)
+schema = strawberry.Schema(Query, Mutation)
 graphql_app = GraphQLRouter(schema)
 
 
@@ -24,7 +24,6 @@ app.include_router(graphql_app, prefix="/graphql")
 origins = [
     "http://localhost:3000",  # 許可したいオリジンを指定
 ]
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
