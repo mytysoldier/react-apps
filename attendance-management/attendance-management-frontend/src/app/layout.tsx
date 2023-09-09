@@ -3,6 +3,9 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Link from "next/link";
+import { ApolloProvider } from "@apollo/client";
+import gqlClient from "@/lib/gql_client";
+import { GqlProvider } from "@/provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,7 +36,10 @@ export default function RootLayout({
               出勤簿
             </Link>
           </div>
-          <div className="w-full">{children}</div>
+          {/* <div className="w-full">{children}</div> */}
+          <GqlProvider>
+            <div className="w-full">{children}</div>
+          </GqlProvider>
         </div>
       </body>
     </html>
