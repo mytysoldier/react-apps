@@ -12,10 +12,10 @@ const GET_USERS = gql`
 `;
 
 export default function Home() {
-  const { loading, error, data } = useQuery(GET_USERS);
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
-  console.log(`data: ${JSON.stringify(data)}`);
+  // const { loading, error, data } = useQuery(GET_USERS);
+  // if (loading) return <p>Loading...</p>;
+  // if (error) return <p>Error: {error.message}</p>;
+  // console.log(`data: ${JSON.stringify(data)}`);
 
   return (
     <div className="flex h-full flex-col justify-center2 items-center">

@@ -1,11 +1,12 @@
-import { Layout } from "@/components/layout/Layout";
+// import { Layout } from "@/components/layout/Layout";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Link from "next/link";
 import { ApolloProvider } from "@apollo/client";
 import gqlClient from "@/lib/gql_client";
-import { GqlProvider } from "@/provider";
+import { GqlProvider } from "@/provider/gql_provider";
+import { Header } from "@/components/common/header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -38,7 +39,10 @@ export default function RootLayout({
           </div>
           {/* <div className="w-full">{children}</div> */}
           <GqlProvider>
-            <div className="w-full">{children}</div>
+            <div className="w-full">
+              <Header />
+              <div>{children}</div>
+            </div>
           </GqlProvider>
         </div>
       </body>
