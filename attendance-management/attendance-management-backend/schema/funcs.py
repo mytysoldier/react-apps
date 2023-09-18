@@ -26,6 +26,13 @@ def get_attendances():
             Attendance(
                 id=attendance.id,
                 date=attendance.date,
+                start_time=attendance.start_time,
+                end_time=attendance.end_time,
+                status=attendance.status,
+                work_time=attendance.work_time,
+                over_work_time=attendance.over_work_time,
+                late_night_work_time=attendance.late_night_work_time,
+                holiday_work_time=attendance.holiday_work_time,
             )
         )
     return results
