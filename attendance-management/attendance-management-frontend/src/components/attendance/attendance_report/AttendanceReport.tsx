@@ -2,6 +2,8 @@
 import CommonTable from "@/components/common/table";
 import { AttendanceData } from "@/type/attendance_data";
 import { gql, useQuery } from "@apollo/client";
+import { format } from "date-fns";
+import ja from "date-fns/locale/ja";
 import React from "react";
 
 // GraphQLクエリ
@@ -35,11 +37,14 @@ const COLUMNS = [
 
 const convertAttendanceDataToString = (data: AttendanceData[]) => {
   return data.map((item) => [
-    item.date.toString(),
+    format(item.date, "MM/dd(EEE)", { locale: ja }),
     item.start_time.toString(),
     item.end_time?.toString() ?? "",
     item.status,
     item.work_time?.toString() ?? "0",
+    item.over_work_time?.toString() ?? "0",
+    item.late_night_work_time?.toString() ?? "0",
+    item.holiday_work_time?.toString() ?? "0",
   ]);
 };
 

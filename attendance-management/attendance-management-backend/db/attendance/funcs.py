@@ -1,6 +1,6 @@
 from db.models import Attendance
 from sqlmodel import Session, select
-from datetime import date
+from datetime import date, datetime
 
 
 # 勤怠一覧取得
@@ -14,8 +14,12 @@ def select_attendances(engine):
 
 
 # 勤怠登録
-def create_attendance(engine) -> Attendance:
-    new_attendance = Attendance(date=date.today())
+def create_attendance(engine, status: str) -> Attendance:
+    new_attendance = Attendance(
+        date=date.today(),
+        status=status,
+        start_time=datetime.now(),
+    )
     with Session(engine) as session:
         session.add(new_attendance)
         session.commit()
