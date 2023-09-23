@@ -1,3 +1,5 @@
+"use client";
+
 import { Disptime, Stamp } from "@/components/timecard";
 import React from "react";
 

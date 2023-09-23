@@ -14,11 +14,11 @@ def select_attendances(engine):
 
 
 # 勤怠登録
-def create_attendance(engine, status: str) -> Attendance:
+def create_attendance(engine, status: str, start_time: datetime) -> Attendance:
     new_attendance = Attendance(
         date=date.today(),
         status=status,
-        start_time=datetime.now(),
+        start_time=start_time,
     )
     with Session(engine) as session:
         session.add(new_attendance)

@@ -1,11 +1,11 @@
 from schema.models import Attendance
 from db.attendance.funcs import create_attendance
 from db.db import engine
-from datetime import date
+from datetime import date, datetime
 
 
-def register_attendance(status: str):
-    created_attendance = create_attendance(engine, status)
+def register_attendance(status: str, start_time: datetime):
+    created_attendance = create_attendance(engine, status, start_time)
     return Attendance(
         id=created_attendance.id,
         date=created_attendance.date,
