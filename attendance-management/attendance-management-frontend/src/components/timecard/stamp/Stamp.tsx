@@ -3,7 +3,9 @@ import { StampItem } from "./stamp_item/StampItem";
 import { useMutation } from "@apollo/client";
 
 export const Stamp = () => {
-  const [registerAttendance] = useMutation(REGISTER_ATTENDANCE_MUTATION);
+  const [registerAttendance, { data }] = useMutation(
+    REGISTER_ATTENDANCE_MUTATION
+  );
   return (
     <>
       <div className="flex gap-16">
@@ -11,18 +13,16 @@ export const Stamp = () => {
           <StampItem
             text="出勤"
             onClick={async () => {
-              console.log("test");
               try {
-                const startTime = new Date(
-                  "2023-09-22T15:45:30Z"
-                ).toISOString();
+                const startTime = new Date().toISOString();
                 await registerAttendance({
                   variables: {
-                    status: "test",
-                    startTime: "2023-09-22T15:45:30Z",
-                    // startTime: startTime,
+                    status: "勤務",
+                    startTime: startTime,
                   },
                 });
+                const id = data?.registerAttendance?.id;
+                console.log(`出勤登録 id: ${id}`);
               } catch (error) {
                 console.error("エラー:", error);
               }

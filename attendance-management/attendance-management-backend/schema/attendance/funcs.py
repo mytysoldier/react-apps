@@ -1,5 +1,6 @@
+from typing import Optional
 from schema.models import Attendance
-from db.attendance.funcs import create_attendance
+from db.attendance.funcs import create_attendance, select_attendance, put_attendance
 from db.db import engine
 from datetime import date, datetime
 
@@ -16,4 +17,19 @@ def register_attendance(status: str, start_time: datetime):
         over_work_time=created_attendance.over_work_time,
         late_night_work_time=created_attendance.late_night_work_time,
         holiday_work_time=created_attendance.holiday_work_time,
+    )
+
+
+def update_attendance(id: int, end_time: Optional[datetime] = None):
+    attendance = put_attendance(engine, id, end_time)
+    return Attendance(
+        id=attendance.id,
+        date=attendance.date,
+        start_time=attendance.start_time,
+        end_time=attendance.end_time,
+        status=attendance.status,
+        work_time=attendance.work_time,
+        over_work_time=attendance.over_work_time,
+        late_night_work_time=attendance.late_night_work_time,
+        holiday_work_time=attendance.holiday_work_time,
     )

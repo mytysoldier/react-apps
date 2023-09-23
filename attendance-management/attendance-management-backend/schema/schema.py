@@ -1,6 +1,6 @@
 import typing
 from schema.funcs import get_users, get_attendances
-from schema.attendance.funcs import register_attendance
+from schema.attendance.funcs import register_attendance, update_attendance
 from schema.models import User, Attendance
 import strawberry
 
@@ -19,3 +19,5 @@ class Query:
 class Mutation:
     # 勤怠登録
     register_attendance: Attendance = strawberry.mutation(resolver=register_attendance)
+    # 勤怠更新
+    update_attendance: Attendance = strawberry.mutation(resolver=update_attendance)
