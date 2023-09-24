@@ -1,14 +1,11 @@
 import { Alert } from "./alert/Alert";
+import { CurrentTime } from "./currenttime/CurrentTime";
 import { Information } from "./information/Information";
 
 export const Disptime = () => {
   return (
     <>
-      <div className="text-xl">2022年10月18日(火)</div>
-      <div className="flex items-end">
-        <span className="text-5xl mr-2">17 : 22</span>
-        <span className="text-xl">45</span>
-      </div>
+      <CurrentTime />
       <div className="mt-8">
         <Alert />
       </div>
