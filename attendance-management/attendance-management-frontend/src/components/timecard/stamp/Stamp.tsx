@@ -32,7 +32,8 @@ export const Stamp = () => {
         <div>
           <StampItem
             text="出勤"
-            disabled={queryData}
+            // 出勤打刻済みなら非活性
+            disabled={queryData["todayAttendance"]}
             onClick={async () => {
               try {
                 const startTime = new Date().toISOString();
@@ -55,6 +56,7 @@ export const Stamp = () => {
         <div>
           <StampItem
             text="退勤"
+            disabled={queryData["todayAttendance"]["endTime"]}
             onClick={async () => {
               try {
                 const endTime = new Date().toISOString();

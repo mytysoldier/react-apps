@@ -5,7 +5,7 @@ import { PulldownItem } from "../pulldown_item/PulldownItem";
 export const Workhours = () => {
   return (
     <div>
-      <PulldownItem title="労働時間" content="0 / 0 日" />
+      <PulldownItem title="労働時間" content="0 時間" />
     </div>
   );
 };

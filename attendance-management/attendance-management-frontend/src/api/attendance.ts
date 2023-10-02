@@ -23,6 +23,7 @@ export const GET_TODAY_ATTENDANCE_QUERY = gql`
     todayAttendance {
       id
       date
+      endTime
     }
   }
 `;

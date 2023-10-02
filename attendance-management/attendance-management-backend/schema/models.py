@@ -1,4 +1,5 @@
 # GraphQLスキーマモデル定義
+from typing import Optional
 import strawberry
 from datetime import date, datetime
 
@@ -16,9 +17,9 @@ class Attendance:
     id: int
     date: date
     start_time: datetime
-    end_time: datetime
+    end_time: Optional[datetime]
     status: str
-    work_time: int
-    over_work_time: int
-    late_night_work_time: int
-    holiday_work_time: int
+    work_time: Optional[int]
+    over_work_time: Optional[int]
+    late_night_work_time: Optional[int]
+    holiday_work_time: Optional[int]
