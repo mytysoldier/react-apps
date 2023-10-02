@@ -3,6 +3,8 @@ export type AttendanceData = {
   date: Date;
   start_time: Date;
   end_time?: Date;
+  break_start_time?: Date;
+  break_end_time?: Date;
   status: string;
   work_time?: number;
   over_work_time?: number;

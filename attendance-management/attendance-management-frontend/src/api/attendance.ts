@@ -24,6 +24,8 @@ export const GET_TODAY_ATTENDANCE_QUERY = gql`
       id
       date
       endTime
+      breakStartTime
+      breakEndTime
     }
   }
 `;

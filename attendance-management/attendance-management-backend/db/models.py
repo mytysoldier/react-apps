@@ -15,6 +15,8 @@ class Attendance(SQLModel, table=True):
     date: date
     start_time: datetime
     end_time: Optional[datetime]
+    break_start_time: Optional[datetime]
+    break_end_time: Optional[datetime]
     status: str
     work_time: Optional[int]
     over_work_time: Optional[int]

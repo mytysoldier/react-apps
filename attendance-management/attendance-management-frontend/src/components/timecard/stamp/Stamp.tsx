@@ -56,7 +56,8 @@ export const Stamp = () => {
         <div>
           <StampItem
             text="退勤"
-            disabled={queryData["todayAttendance"]["endTime"]}
+            // 退勤打刻済みなら非活性
+            disabled={queryData["todayAttendance"]?.endTime}
             onClick={async () => {
               try {
                 const endTime = new Date().toISOString();
@@ -76,10 +77,24 @@ export const Stamp = () => {
       </div>
       <div className="flex gap-16 mt-16">
         <div>
-          <StampItem text="休憩入り" />
+          <StampItem
+            text="休憩入り"
+            // 休憩入りもしくは退勤打刻済みなら非活性
+            disabled={
+              queryData["todayAttendance"]?.breakStartTime ||
+              queryData["todayAttendance"]?.endTime
+            }
+          />
         </div>
         <div>
-          <StampItem text="休憩戻り" />
+          <StampItem
+            text="休憩戻り"
+            // 休憩戻りもしくは退勤打刻済みなら非活性
+            disabled={
+              queryData["todayAttendance"]?.breakEndTime ||
+              queryData["todayAttendance"]?.endTime
+            }
+          />
         </div>
       </div>
     </>

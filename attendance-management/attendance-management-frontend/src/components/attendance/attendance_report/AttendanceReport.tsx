@@ -19,6 +19,8 @@ const GET_ATTENDANCES = gql`
       startTime
       status
       workTime
+      breakStartTime
+      breakEndTime
     }
   }
 `;
@@ -39,6 +41,7 @@ const convertAttendanceDataToString = (data: AttendanceData[]) => {
   return data.map((item) => [
     format(item.date, "MM/dd(EEE)", { locale: ja }),
     item.start_time.toString(),
+    // format(item.start_time, "HH:mm"),
     item.end_time?.toString() ?? "",
     item.status,
     item.work_time?.toString() ?? "0",
@@ -59,7 +62,8 @@ export const AttendanceReport = () => {
     attendanceData = data.attendances.map((attendance: any) => ({
       id: attendance.id,
       date: new Date(attendance.date), // 文字列からDate型に変換
-      start_time: new Date(attendance.start_time),
+      start_time: new Date(attendance.startTime),
+      // TODO ここ直す
       end_time: new Date(attendance.end_time),
       status: attendance.status,
       work_time: attendance.work_time,
