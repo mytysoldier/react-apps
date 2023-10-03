@@ -18,6 +18,24 @@ export const UPDATE_ATTENDANCE_END_WORK_MUTATION = gql`
   }
 `;
 
+export const UPDATE_ATTENDANCE_BREAK_START_MUTATION = gql`
+  mutation UpdateAttendanceEndWork($id: Int!, $breakStartTime: DateTime!) {
+    updateAttendance(id: $id, breakStartTime: $breakStartTime) {
+      id
+      status
+    }
+  }
+`;
+
+export const UPDATE_ATTENDANCE_BREAK_END_MUTATION = gql`
+  mutation UpdateAttendanceEndWork($id: Int!, $breakEndTime: DateTime!) {
+    updateAttendance(id: $id, breakEndTime: $breakEndTime) {
+      id
+      status
+    }
+  }
+`;
+
 export const GET_TODAY_ATTENDANCE_QUERY = gql`
   query GetTodayAttendance {
     todayAttendance {

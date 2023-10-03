@@ -20,8 +20,13 @@ def register_attendance(status: str, start_time: datetime):
     )
 
 
-def update_attendance(id: int, end_time: Optional[datetime] = None):
-    attendance = put_attendance(engine, id, end_time)
+def update_attendance(
+    id: int,
+    end_time: Optional[datetime] = None,
+    break_start_time: Optional[datetime] = None,
+    break_end_time: Optional[datetime] = None,
+):
+    attendance = put_attendance(engine, id, end_time, break_start_time, break_end_time)
     return Attendance(
         id=attendance.id,
         date=attendance.date,

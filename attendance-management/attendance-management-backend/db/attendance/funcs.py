@@ -48,18 +48,44 @@ def create_attendance(engine, status: str, start_time: datetime) -> Attendance:
 
 
 # 勤怠更新
-def put_attendance(engine, id: int, end_time: Optional[datetime]) -> Attendance:
+def put_attendance(
+    engine,
+    id: int,
+    end_time: Optional[datetime],
+    break_start_time: Optional[datetime],
+    break_end_time: Optional[datetime],
+) -> Attendance:
     with Session(engine) as session:
         statement = select(Attendance).where(Attendance.id == id)
         results = session.exec(statement)
         attendance = results.one()
 
+        # 休憩入り時刻を更新
+        attendance.break_start_time = (
+            break_start_time
+            if break_start_time is not None
+            else attendance.break_start_time
+        )
+        # 休憩戻り時刻を更新
+        attendance.break_start_time = (
+            break_end_time if break_end_time is not None else attendance.break_end_time
+        )
+
+        # 退勤時刻を更新
         attendance.end_time = end_time if end_time is not None else attendance.end_time
         if attendance.end_time is not None:
             # 勤務時間を計算
             tz = pytz.timezone("Asia/Tokyo")
             time_difference = attendance.end_time - tz.localize(attendance.start_time)
-            work_time = time_difference / timedelta(hours=1)
+
+            # 休憩時間を計算
+            break_time_difference = tz.localize(
+                attendance.break_end_time
+            ) - tz.localize(attendance.break_start_time)
+
+            work_time = (time_difference - break_time_difference) / timedelta(hours=1)
+
+            # work_time = time_difference / timedelta(hours=1)
             # 残業時間を計算
             over_work_time = 0 if work_time <= 8 else work_time - 8
             attendance.work_time = int(work_time)

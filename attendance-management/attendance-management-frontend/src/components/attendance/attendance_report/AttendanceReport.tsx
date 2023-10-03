@@ -40,9 +40,8 @@ const COLUMNS = [
 const convertAttendanceDataToString = (data: AttendanceData[]) => {
   return data.map((item) => [
     format(item.date, "MM/dd(EEE)", { locale: ja }),
-    item.start_time.toString(),
-    // format(item.start_time, "HH:mm"),
-    item.end_time?.toString() ?? "",
+    format(item.start_time, "HH:mm"),
+    item.end_time != null ? format(item.end_time, "HH:mm") : "",
     item.status,
     item.work_time?.toString() ?? "0",
     item.over_work_time?.toString() ?? "0",
@@ -63,13 +62,12 @@ export const AttendanceReport = () => {
       id: attendance.id,
       date: new Date(attendance.date), // 文字列からDate型に変換
       start_time: new Date(attendance.startTime),
-      // TODO ここ直す
-      end_time: new Date(attendance.end_time),
+      end_time: new Date(attendance.endTime),
       status: attendance.status,
-      work_time: attendance.work_time,
-      over_work_time: attendance.over_work_time,
-      late_night_work_time: attendance.late_night_work_time,
-      holiday_work_time: attendance.holiday_work_time,
+      work_time: attendance.workTime,
+      over_work_time: attendance.overWorkTime,
+      late_night_work_time: attendance.lateNightWorkTime,
+      holiday_work_time: attendance.holidayWorkTime,
     }));
   }
 
