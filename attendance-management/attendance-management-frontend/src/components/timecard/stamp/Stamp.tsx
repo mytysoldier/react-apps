@@ -64,8 +64,11 @@ export const Stamp = () => {
         <div>
           <StampItem
             text="退勤"
-            // 退勤打刻済みなら非活性
-            disabled={queryData["todayAttendance"]?.endTime}
+            // 当日の勤怠未登録もしくは退勤打刻済みなら非活性
+            disabled={
+              !queryData["todayAttendance"] ||
+              queryData["todayAttendance"]?.endTime
+            }
             onClick={async () => {
               try {
                 const endTime = new Date().toISOString();
@@ -87,8 +90,9 @@ export const Stamp = () => {
         <div>
           <StampItem
             text="休憩入り"
-            // 休憩入りもしくは退勤打刻済みなら非活性
+            // 当日の勤怠未登録もしくは休憩入りもしくは退勤打刻済みなら非活性
             disabled={
+              !queryData["todayAttendance"] ||
               queryData["todayAttendance"]?.breakStartTime ||
               queryData["todayAttendance"]?.endTime
             }
@@ -111,8 +115,9 @@ export const Stamp = () => {
         <div>
           <StampItem
             text="休憩戻り"
-            // 休憩戻りもしくは退勤打刻済みなら非活性
+            // 当日の勤怠未登録もしくは休憩戻りもしくは退勤打刻済みなら非活性
             disabled={
+              !queryData["todayAttendance"] ||
               queryData["todayAttendance"]?.breakEndTime ||
               queryData["todayAttendance"]?.endTime
             }

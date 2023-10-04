@@ -67,13 +67,14 @@ def put_attendance(
             else attendance.break_start_time
         )
         # 休憩戻り時刻を更新
-        attendance.break_start_time = (
+        attendance.break_end_time = (
             break_end_time if break_end_time is not None else attendance.break_end_time
         )
 
         # 退勤時刻を更新
         attendance.end_time = end_time if end_time is not None else attendance.end_time
         if attendance.end_time is not None:
+            print("attendance.end_timeの値:", attendance.end_time)
             # 勤務時間を計算
             tz = pytz.timezone("Asia/Tokyo")
             time_difference = attendance.end_time - tz.localize(attendance.start_time)
@@ -95,4 +96,5 @@ def put_attendance(
         session.add(attendance)
         session.commit()
         session.refresh(attendance)
+        print("更新完了！")
         return attendance
