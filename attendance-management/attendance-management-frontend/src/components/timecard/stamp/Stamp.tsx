@@ -79,6 +79,7 @@ export const Stamp = () => {
                   },
                 });
                 console.log(`退勤登録 id: ${data?.registerAttendance?.id}`);
+                refetch();
               } catch (error) {
                 console.error("エラー:", error);
               }
@@ -106,6 +107,7 @@ export const Stamp = () => {
                   },
                 });
                 console.log(`休憩入り登録 id: ${data?.registerAttendance?.id}`);
+                refetch();
               } catch (error) {
                 console.error("エラー:", error);
               }
@@ -131,6 +133,7 @@ export const Stamp = () => {
                   },
                 });
                 console.log(`休憩戻り登録 id: ${data?.registerAttendance?.id}`);
+                refetch();
               } catch (error) {
                 console.error("エラー:", error);
               }
