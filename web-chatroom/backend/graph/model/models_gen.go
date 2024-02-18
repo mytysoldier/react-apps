@@ -2,10 +2,17 @@
 
 package model
 
+type Message struct {
+	ID        string `json:"id"`
+	Text      string `json:"text"`
+	CreatedAt string `json:"createdAt"`
+	UserID    string `json:"userId"`
+}
+
 type Mutation struct {
 }
 
-type NewTodo struct {
+type NewMessage struct {
 	Text   string `json:"text"`
 	UserID string `json:"userId"`
 }
@@ -13,14 +20,12 @@ type NewTodo struct {
 type Query struct {
 }
 
-type Todo struct {
-	ID   string `json:"id"`
-	Text string `json:"text"`
-	Done bool   `json:"done"`
-	User *User  `json:"user"`
+type Subscription struct {
 }
 
 type User struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+	ID        string `json:"id"`
+	Name      string `json:"name"`
+	CreatedAt string `json:"createdAt"`
+	DeletedAt string `json:"deletedAt"`
 }

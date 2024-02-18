@@ -8,16 +8,63 @@ import (
 	"backend/graph/model"
 	"context"
 	"fmt"
+	"log"
+	"time"
+
+	"github.com/segmentio/ksuid"
 )
 
-// CreateTodo is the resolver for the createTodo field.
-func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: CreateTodo - createTodo"))
+// PostMessage is the resolver for the postMessage field.
+func (r *mutationResolver) PostMessage(ctx context.Context, input model.NewMessage) (*model.Message, error) {
+	message := &model.Message{
+		ID:        ksuid.New().String(),
+		CreatedAt: time.Now().Format(time.RFC3339),
+		UserID:    input.UserID,
+		Text:      input.Text,
+	}
+
+	// 投稿されたメッセージを保存し、subscribeしている全てのコネクションにブロードキャスト
+	r.mutex.Lock()
+	r.messages = append(r.messages, message)
+	for _, ch := range r.subscribers {
+		ch <- message
+	}
+	r.mutex.Unlock()
+
+	return message, nil
 }
 
-// Todos is the resolver for the todos field.
-func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: Todos - todos"))
+// Messages is the resolver for the messages field.
+func (r *queryResolver) Messages(ctx context.Context) ([]*model.Message, error) {
+	return r.messages, nil
+}
+
+// MessagePosted is the resolver for the messagePosted field.
+func (r *subscriptionResolver) MessagePosted(ctx context.Context, userID string) (<-chan *model.Message, error) {
+	r.mutex.Lock()
+	defer r.mutex.Unlock()
+
+	if _, ok := r.subscribers[userID]; ok {
+		err := fmt.Errorf("`%s` has already been subscribed", userID)
+		log.Print(err.Error())
+		return nil, err
+	}
+
+	// チャンネルを作成し、リストに登録
+	ch := make(chan *model.Message, 1)
+	r.subscribers[userID] = ch
+	log.Printf("`%s` has been subscribed!", userID)
+
+	// コネクションが終了したら、このチャンネルを削除する
+	go func() {
+		<-ctx.Done()
+		r.mutex.Lock()
+		delete(r.subscribers, userID)
+		r.mutex.Unlock()
+		log.Printf("`%s` has been unsubscribed.", userID)
+	}()
+
+	return ch, nil
 }
 
 // Mutation returns MutationResolver implementation.
@@ -26,5 +73,9 @@ func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
+// Subscription returns SubscriptionResolver implementation.
+func (r *Resolver) Subscription() SubscriptionResolver { return &subscriptionResolver{r} }
+
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+type subscriptionResolver struct{ *Resolver }

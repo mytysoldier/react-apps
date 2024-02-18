@@ -5,15 +5,15 @@
 type Message {
   id: ID!
   text: String!
-  createdAt: Timestamp!
+  createdAt: String!
   userId: ID!
 }
 
 type User {
   id: ID!
   name: String!
-  createdAt: Timestamp!
-  deletedAt: Timestamp!
+  createdAt: String!
+  deletedAt: String!
 }
 
 type Query {
@@ -26,7 +26,7 @@ input NewMessage {
 }
 
 type Mutation {
-  createTodo(input: NewMessage!): Message!
+  postMessage(input: NewMessage!): Message!
 }
 
 type Subscription {
