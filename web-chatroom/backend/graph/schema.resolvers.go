@@ -44,6 +44,7 @@ func (r *subscriptionResolver) MessagePosted(ctx context.Context, userID string)
 	r.mutex.Lock()
 	defer r.mutex.Unlock()
 
+	// すでにサブスクライブされているかチェック
 	if _, ok := r.subscribers[userID]; ok {
 		err := fmt.Errorf("`%s` has already been subscribed", userID)
 		log.Print(err.Error())
@@ -53,18 +54,34 @@ func (r *subscriptionResolver) MessagePosted(ctx context.Context, userID string)
 	// チャンネルを作成し、リストに登録
 	ch := make(chan *model.Message, 1)
 	r.subscribers[userID] = ch
+
 	log.Printf("`%s` has been subscribed!", userID)
 
 	// コネクションが終了したら、このチャンネルを削除する
 	go func() {
 		<-ctx.Done()
 		r.mutex.Lock()
+		defer r.mutex.Unlock()
+
 		delete(r.subscribers, userID)
-		r.mutex.Unlock()
+
+		close(ch)
 		log.Printf("`%s` has been unsubscribed.", userID)
 	}()
 
-	return ch, nil
+	// このチャンネルが利用するメッセージを選択するためのフィルタリング
+	filteredCh := make(chan *model.Message)
+
+	go func() {
+		for msg := range ch {
+			// メッセージのユーザーIDとサブスクライバーのユーザーIDを比較
+			if msg.UserID == userID {
+				filteredCh <- msg
+			}
+		}
+	}()
+
+	return filteredCh, nil
 }
 
 // Mutation returns MutationResolver implementation.
