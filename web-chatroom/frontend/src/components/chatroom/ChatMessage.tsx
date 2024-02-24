@@ -2,6 +2,7 @@ import { useSubscription } from "@apollo/client";
 import { MESSAGE_POSTED_SUBSCRIPTION } from "../../apis/subscription";
 import { formatDate } from "../../util/date_util";
 import { useEffect, useState } from "react";
+import { userIconMap } from "../../constant/Constant";
 
 function ChatMessage({
   userID,
@@ -31,8 +32,12 @@ function ChatMessage({
               <p className="text-xs p-3">
                 {formatDate(data.createdAt, "MM月dd日(E) HH:mm")}
               </p>
-              <div className="bg-blue-500 text-white rounded-lg p-3">
-                <p className="font-bold">{data.text}</p>
+              <div className="flex h-8">
+                <div className="mr-6">{userIconMap[userID] || null}</div>
+
+                <p className="flex-auto h-8 bg-blue-500 text-white rounded-lg p-3 font-bold flex items-center">
+                  {data.text}
+                </p>
               </div>
             </>
           ))}
