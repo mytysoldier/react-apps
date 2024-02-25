@@ -2,7 +2,7 @@ import { useState } from "react";
 import { userIconMap } from "../../constant/Constant";
 
 function UsersList({ onSelectUser }: { onSelectUser: (name: string) => void }) {
-  // ユーザーデータの配列（例）
+  // ユーザーデータの配列
   const usersData = [
     { id: "1", name: "John", intro: "I'm a doctor." },
     { id: "2", name: "Ninja", intro: "I'm a ninja." },
@@ -42,10 +42,10 @@ function UsersList({ onSelectUser }: { onSelectUser: (name: string) => void }) {
             >
               {userIconMap[user.id] || null}
               <div className="ml-4">
-                <p className="text-lg font-semibold">{user.name}</p>{" "}
                 {/* 人名 */}
-                <p className="text-sm text-gray-600">{user.intro}</p>{" "}
+                <p className="text-lg font-semibold">{user.name}</p>{" "}
                 {/* 自己紹介文 */}
+                <p className="text-sm text-gray-600">{user.intro}</p>{" "}
               </div>
             </div>
           </div>
