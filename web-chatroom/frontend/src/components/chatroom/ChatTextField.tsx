@@ -22,7 +22,8 @@ function ChatTextField({ targetUserID }: { targetUserID: string }) {
             variables: { input: { text: message, userId: targetUserID } },
           });
         }}
-        className="rounded-r p-3 bg-blue-500 text-white transition duration-300 hover:bg-blue-600"
+        className="rounded-r p-3 bg-blue-500 text-white
+         transition duration-300 hover:bg-blue-600"
       >
         送信
       </button>

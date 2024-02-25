@@ -35,7 +35,8 @@ function ChatMessage({
               <div className="flex h-8">
                 <div className="mr-6">{userIconMap[userID] || null}</div>
 
-                <p className="flex-auto h-8 bg-blue-500 text-white rounded-lg p-3 font-bold flex items-center">
+                <p className="flex-auto h-8 bg-blue-500 text-white
+                 rounded-lg p-3 font-bold flex items-center">
                   {data.text}
                 </p>
               </div>

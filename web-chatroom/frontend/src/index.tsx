@@ -25,13 +25,6 @@ const wsLink = new GraphQLWsLink(
   })
 );
 
-// const wsLink2 = new WebSocketLink({
-//   uri: "ws://localhost:2000/graphql",
-//   options: {
-//     reconnect: true,
-//   },
-// });
-
 const splitLink = split(
   ({ query }) => {
     const definition = getMainDefinition(query);

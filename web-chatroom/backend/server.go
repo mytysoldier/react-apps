@@ -21,8 +21,10 @@ func main() {
 		port = defaultPort
 	}
 
-	// srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
-	srv := handler.New(graph.NewExecutableSchema(graph.Config{Resolvers: graph.NewResolver()}))
+	srv := handler.New(
+		graph.NewExecutableSchema(
+			graph.Config{Resolvers: graph.NewResolver()}),
+	)
 
 	// add ws transport configured by ourselves
 	srv.AddTransport(transport.Options{})
