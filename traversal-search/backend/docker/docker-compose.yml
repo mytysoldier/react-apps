@@ -1,11 +1,20 @@
 version: "3"
 services:
+  sysctl:
+    image: alpine
+    container_name: sysctl
+    command: ["sysctl", "-w", "vm.max_map_count=262144"]
+    privileged: true
+    networks:
+      - esnet
   es01:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: es01
     environment:
       - node.name=es01
-      - discovery.seed_hosts=es02
+      # - discovery.seed_hosts=es02
       - cluster.initial_master_nodes=es01
       - cluster.name=docker-cluster
       - bootstrap.memory_lock=true
@@ -20,6 +29,8 @@ services:
       - 9200:9200
     networks:
       - esnet
+    depends_on:
+      - sysctl
 
 volumes:
   esdata01:
