@@ -1,21 +1,30 @@
-from csv import DictReader
+from fastapi import FastAPI, File, UploadFile
+from fastapi.responses import JSONResponse
+from funcs.search_document.search_document import search_document
+from fastapi.middleware.cors import CORSMiddleware
 
-from elasticsearch import Elasticsearch
+app = FastAPI()
 
+# CORS設定
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # すべてのオリジンを許可
+    allow_credentials=True,
+    allow_methods=["*"],  # すべてのHTTPメソッドを許可
+    allow_headers=["*"],  # すべてのヘッダーを許可
+)
 
-csv_file = "input.csv"
+@app.get("/")
+def home():
+    return {"home": "hello"}
 
-elasticsearch_host = "localhost"
-index_name = "book"
+@app.get("/search")
+def search():
+    return search_document()
 
-es = Elasticsearch([f"http://{elasticsearch_host}:9200"])
-# es = Elasticsearch([{"host": elasticsearch_host, "port": 9200, "scheme": "http"}])
-
-with open(csv_file, "rt", encoding= "utf-8") as file:
-    reader = DictReader(file)
-
-    for row in reader:
-        doc = row
-        isbn = doc["isbn"]
-
-        es.index(index=index_name, id=isbn, body=doc)
+@app.post("/upload")
+async def upload(file: UploadFile = File(...)):
+    contents = await file.read()
+    print("Uploaded file name:", file.filename)
+    print("Uploaded file type:", file.content_type)
+    return JSONResponse(content={"message": "File uploaded successfully"})

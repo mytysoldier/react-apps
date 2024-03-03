@@ -11,28 +11,26 @@ headers = {
 
 excel_file = "input.xlsx"
 
-df = pd.read_excel(excel_file)
+# ブック全体の内容を入れるための空のリストを作成
+book_content = []
 
-book_content = df.to_dict(orient="records")
+# Excelファイルから各シートのデータを読み込んでリストに追加する
+with pd.ExcelFile(excel_file) as xls:
+    for sheet_name in xls.sheet_names:
+        df = pd.read_excel(xls, sheet_name)
+        records = df.to_dict(orient="records")
+        book_content.extend(records)
 
-print(book_content)
+# Elasticsearchに送信するデータを構築
+data = {"doc": {"text": json.dumps(book_content, ensure_ascii=False)}}
 
-# # データフレームの各行を処理する
-# for _, row in df.iterrows():
-#     row_json = row.to_json(orient="columns")
+print(json.dumps(book_content, ensure_ascii=False))
 
-# with open(csv_file, "rt", encoding="utf-8") as file:
-#     reader = DictReader(file)
+# # Elasticsearchにデータを送信
+# response = requests.post(url, json=data, headers=headers)
 
-#     for row in reader:
-#         row_json = json.dumps(row)
-#         # doc = {
-#         #     "doc": row_json,
-#         # }
-
-#         # response = requests.post(url, json=doc, headers=headers)
-#         response = requests.post(url, json={"doc": {"text": row_json}}, headers=headers)
-#         if response.status_code == 201:
-#             print("Document indexed successfully.")
-#         else:
-#             print(f"Failed to index document. Status code: {response.text}")
+# # レスポンスの処理
+# if response.status_code == 201:
+#     print("Document indexed successfully.")
+# else:
+#     print(f"Failed to index document. Status code: {response.text}")
