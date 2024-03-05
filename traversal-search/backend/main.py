@@ -3,6 +3,8 @@ from fastapi.responses import JSONResponse
 from funcs.search_document.search_document import search_document
 from fastapi.middleware.cors import CORSMiddleware
 
+from funcs.upload_document.upload_document import upload_document
+
 app = FastAPI()
 
 # CORS設定
@@ -14,17 +16,21 @@ app.add_middleware(
     allow_headers=["*"],  # すべてのヘッダーを許可
 )
 
+
 @app.get("/")
 def home():
     return {"home": "hello"}
+
 
 @app.get("/search")
 def search():
     return search_document()
 
+
 @app.post("/upload")
 async def upload(file: UploadFile = File(...)):
-    contents = await file.read()
+    # contents = await file.read()
     print("Uploaded file name:", file.filename)
     print("Uploaded file type:", file.content_type)
-    return JSONResponse(content={"message": "File uploaded successfully"})
+    await upload_document(file)
+    return JSONResponse(content={"result": "success"})
