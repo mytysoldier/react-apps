@@ -4,6 +4,6 @@ export type SearchDocumentResponse = {
 };
 
 export type SearchDocumentResult = {
-  fileName: string;
+  file_name: string;
   text: string;
 };

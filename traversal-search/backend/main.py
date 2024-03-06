@@ -4,6 +4,7 @@ from funcs.search_document.search_document import search_document
 from fastapi.middleware.cors import CORSMiddleware
 
 from funcs.upload_document.upload_document import upload_document
+from models.search_document import SearchDocumentResponse
 
 app = FastAPI()
 
@@ -22,7 +23,7 @@ def home():
     return {"home": "hello"}
 
 
-@app.get("/search")
+@app.get("/search", response_model=SearchDocumentResponse)
 def search():
     return search_document()
 

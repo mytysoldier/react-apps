@@ -1,11 +1,13 @@
 from typing import NamedTuple, List
 from dataclasses import dataclass
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+
 
 # @dataclass
 class SearchDocumentResponse(BaseModel):
     count: int
-    result: List['SearchDocumentResult']
+    result: List["SearchDocumentResult"]
+
 
 # @dataclass
 class SearchDocumentResult(BaseModel):

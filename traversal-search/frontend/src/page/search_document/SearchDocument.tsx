@@ -9,6 +9,7 @@ function SearchDocument() {
 
   const handleSearch = async () => {
     const result = await search_document();
+    console.log(`search result: ${JSON.stringify(result)}`);
     setSearchResult(result);
   };
 
@@ -28,7 +29,7 @@ function SearchDocument() {
         </button>
       </div>
       {/* 検索結果を表示 */}
-      {searchResult && <SearchResult />}
+      {searchResult && <SearchResult data={searchResult} />}
     </div>
   );
 }
