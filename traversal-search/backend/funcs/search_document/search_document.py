@@ -2,10 +2,11 @@ import requests
 from models.search_document import SearchDocumentResponse, SearchDocumentResult
 
 
-def search_document():
+def search_document(text: str):
     try:
         # Elasticsearchへのクエリ実行
-        response = requests.get("http://localhost:9200/book/_search?pretty")
+        query = {"query": {"wildcard": {"doc.text": f"*{text}*"}}}
+        response = requests.post("http://localhost:9200/book/_search", json=query)
 
         # ステータスコードが200以外の場合はエラーを出力して終了
         if response.status_code != 200:

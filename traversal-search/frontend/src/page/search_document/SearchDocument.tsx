@@ -4,11 +4,12 @@ import { SearchDocumentResponse } from "../../api/model/model";
 import SearchResult from "../../component/search_document/SearchResult";
 
 function SearchDocument() {
+  const [searchText, setSearchText] = useState("");
   const [searchResult, setSearchResult] =
     useState<SearchDocumentResponse | null>(null);
 
   const handleSearch = async () => {
-    const result = await search_document();
+    const result = await search_document(searchText);
     console.log(`search result: ${JSON.stringify(result)}`);
     setSearchResult(result);
   };
@@ -19,6 +20,7 @@ function SearchDocument() {
       <div className="flex justify-center w-full">
         <input
           type="text"
+          onChange={(e) => setSearchText(e.target.value)}
           className="mr-2 px-4 py-2 border border-gray-300 rounded-lg w-2/4 focus:outline-none focus:border-blue-500"
         />
         <button

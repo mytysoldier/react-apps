@@ -1,9 +1,11 @@
 import { SearchDocumentResponse } from "./model/model";
 
-export async function search_document(): Promise<SearchDocumentResponse> {
+export async function search_document(
+  text: string
+): Promise<SearchDocumentResponse> {
   try {
     // HTTP GETリクエストを送信し、サーバーからのレスポンスを取得する
-    const response = await fetch("http://localhost:8000/search");
+    const response = await fetch(`http://localhost:8000/search?text=${text}`);
 
     // サーバーからのレスポンスが正常でない場合は例外をスローする
     if (!response.ok) {

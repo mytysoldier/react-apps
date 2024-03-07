@@ -1,4 +1,5 @@
-from fastapi import FastAPI, File, UploadFile
+from typing import Optional
+from fastapi import FastAPI, File, Query, UploadFile
 from fastapi.responses import JSONResponse
 from funcs.search_document.search_document import search_document
 from fastapi.middleware.cors import CORSMiddleware
@@ -24,8 +25,8 @@ def home():
 
 
 @app.get("/search", response_model=SearchDocumentResponse)
-def search():
-    return search_document()
+def search(text: Optional[str] = Query(None, description="検索クエリー")):
+    return search_document(text)
 
 
 @app.post("/upload")
