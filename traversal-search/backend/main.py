@@ -26,6 +26,7 @@ def home():
 
 @app.get("/search", response_model=SearchDocumentResponse)
 def search(text: Optional[str] = Query(None, description="検索クエリー")):
+    print("search text:", text)
     return search_document(text)
 
 

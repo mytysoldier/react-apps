@@ -28,7 +28,12 @@ async def upload_excel(file: UploadFile = File(...)):
                 book_content.extend(records)
 
         # Elasticsearchに送信するデータを構築
-        data = {"doc": {"text": json.dumps(book_content, ensure_ascii=False)}}
+        data = {
+            "doc": {
+                "name": file_name,
+                "text": json.dumps(book_content, ensure_ascii=False),
+            }
+        }
         print("Uploaded file data:", data)
 
         response = requests.post(

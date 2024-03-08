@@ -1,3 +1,4 @@
+import re
 import requests
 from models.search_document import SearchDocumentResponse, SearchDocumentResult
 
@@ -5,7 +6,13 @@ from models.search_document import SearchDocumentResponse, SearchDocumentResult
 def search_document(text: str):
     try:
         # Elasticsearchへのクエリ実行
-        query = {"query": {"wildcard": {"doc.text": f"*{text}*"}}}
+        if is_alphanumeric(text):
+            # 半角英数字の場合
+            query = {"query": {"regexp": {"doc.text": f".*{text}.*"}}}
+        else:
+            # 日本語の場合
+            query = {"query": {"match_phrase": {"doc.text": text}}}
+
         response = requests.post("http://localhost:9200/book/_search", json=query)
 
         # ステータスコードが200以外の場合はエラーを出力して終了
@@ -40,3 +47,8 @@ def search_document(text: str):
             f"Error: An error occurred while processing the response from Elasticsearch: {str(e)}"
         )
         return SearchDocumentResponse(count=0, result=[])
+
+
+def is_alphanumeric(text):
+    pattern = re.compile(r"^[a-zA-Z0-9]*$")
+    return bool(pattern.match(text))
