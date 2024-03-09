@@ -19,21 +19,12 @@ app.add_middleware(
 )
 
 
-@app.get("/")
-def home():
-    return {"home": "hello"}
-
-
 @app.get("/search", response_model=SearchDocumentResponse)
 def search(text: Optional[str] = Query(None, description="検索クエリー")):
-    print("search text:", text)
     return search_document(text)
 
 
 @app.post("/upload")
 async def upload(file: UploadFile = File(...)):
-    # contents = await file.read()
-    print("Uploaded file name:", file.filename)
-    print("Uploaded file type:", file.content_type)
-    await upload_document(file)
-    return JSONResponse(content={"result": "success"})
+    result = await upload_document(file)
+    return JSONResponse(content={"result": result})
